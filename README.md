@@ -38,3 +38,8 @@ deactivate frontend
 deactivate user
 @enduml
 ```
+
+## Автор
+>**Ветров Сергей**
+>- [GitHub](https://github.com/omon4412)
+>- [Email](mailto:vetrov241201@yandex.ru)

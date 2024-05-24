@@ -1,5 +1,3 @@
 spring:
   application:
     name: MiddleService
-server:
-  port: 8080
