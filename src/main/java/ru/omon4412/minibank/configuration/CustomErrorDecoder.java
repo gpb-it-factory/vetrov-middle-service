@@ -5,6 +5,7 @@ import feign.Util;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Configuration;
 import ru.omon4412.minibank.exception.ConflictException;
+import ru.omon4412.minibank.exception.ServerNotAvailableException;
 
 import java.io.IOException;
 
@@ -23,7 +24,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
         }
         return switch (response.status()) {
             case 409 -> new ConflictException(errorMessage);
-            default -> new RuntimeException(errorMessage);
+            default -> new ServerNotAvailableException(errorMessage);
         };
     }
 }

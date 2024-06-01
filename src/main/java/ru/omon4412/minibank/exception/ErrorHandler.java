@@ -52,9 +52,15 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ApiError handleJsonParseException(HttpMessageNotReadableException e, HttpServletRequest request) {
+    public ApiError handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletRequest request) {
         String path = request.getRequestURI();
         return ApiError.from(e.getMessage(), HttpStatus.BAD_REQUEST, path);
+    }
+
+    @ExceptionHandler(ServerNotAvailableException.class)
+    public ApiError handleServerNotAvailableException(ServerNotAvailableException e, HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return ApiError.from(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE, path);
     }
 
     @ExceptionHandler(Throwable.class)
@@ -63,6 +69,4 @@ public class ErrorHandler {
         String path = request.getRequestURI();
         return ApiError.from(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, path);
     }
-
-
 }
