@@ -63,6 +63,13 @@ public class ErrorHandler {
         return ApiError.from(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE, path);
     }
 
+    @ExceptionHandler(InternalServerErrorException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiError handleInternalServerErrorException(InternalServerErrorException e, HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return ApiError.from(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, path);
+    }
+
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleThrowable(Throwable e, HttpServletRequest request) {

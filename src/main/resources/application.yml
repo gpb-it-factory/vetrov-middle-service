@@ -3,5 +3,7 @@ spring:
     name: MiddleService
 
 application:
+  registrationService:
+    type: inMemory
   backendService:
     url: ${BACKEND_SERVICE_URL:http://localhost:8081}
