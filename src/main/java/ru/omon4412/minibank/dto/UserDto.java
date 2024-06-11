@@ -7,4 +7,6 @@ import lombok.Data;
 public class UserDto {
     @NotNull
     private Long userId;
+    @NotNull
+    private String userName;
 }
