@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.omon4412.minibank.dto.UserDto;
+import ru.omon4412.minibank.dto.UserRequestDto;
 import ru.omon4412.minibank.service.RegistrationService;
 
 import static org.mockito.Mockito.*;
@@ -34,16 +34,16 @@ class RegistrationControllerTest {
 
     @Test
     void test_registerUser_success() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(10101L);
-        userDto.setUserName("TestUser");
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(10101L);
+        userRequestDto.setUserName("TestUser");
 
-        doNothing().when(registrationService).registerUser(any(UserDto.class));
+        doNothing().when(registrationService).registerUser(any(UserRequestDto.class));
 
-        mockMvc.perform(post("/users").content(new ObjectMapper().writeValueAsString(userDto))
+        mockMvc.perform(post("/users").content(new ObjectMapper().writeValueAsString(userRequestDto))
                         .contentType("application/json"))
                 .andExpect(status().isNoContent());
-        verify(registrationService, times(1)).registerUser(userDto);
+        verify(registrationService, times(1)).registerUser(userRequestDto);
     }
 
     @Test
@@ -55,9 +55,9 @@ class RegistrationControllerTest {
 
     @Test
     void testRegisterUser_ifUserIdIsNull_thenReturn400() throws Exception {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(null);
-        mockMvc.perform(post("/users").content(new ObjectMapper().writeValueAsString(userDto))
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(null);
+        mockMvc.perform(post("/users").content(new ObjectMapper().writeValueAsString(userRequestDto))
                         .contentType("application/json"))
                 .andExpect(status().isBadRequest());
     }

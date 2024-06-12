@@ -8,9 +8,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import ru.omon4412.minibank.client.BackendServiceClient;
-import ru.omon4412.minibank.dto.UserDto;
+import ru.omon4412.minibank.dto.UserRequestDto;
+import ru.omon4412.minibank.dto.UsernameResponseDto;
 import ru.omon4412.minibank.exception.ConflictException;
+import ru.omon4412.minibank.exception.NotFoundException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -26,32 +29,50 @@ class RegistrationServiceImplTest {
 
     @Test
     void test_registerUser_success() {
-        UserDto userDto = new UserDto();
+        UserRequestDto userRequestDto = new UserRequestDto();
         ResponseEntity<Void> responseEntity = ResponseEntity.noContent().build();
-        when(backendServiceClient.registerUser(any(UserDto.class))).thenReturn(responseEntity);
+        when(backendServiceClient.registerUser(any(UserRequestDto.class))).thenReturn(responseEntity);
 
-        registrationService.registerUser(userDto);
+        registrationService.registerUser(userRequestDto);
 
-        verify(backendServiceClient, times(1)).registerUser(any(UserDto.class));
+        verify(backendServiceClient, times(1)).registerUser(any(UserRequestDto.class));
     }
 
     @Test
     void test_registerUser_whenUserAlreadyRegistered() {
         ConflictException feignClientException = new ConflictException("");
-        when(backendServiceClient.registerUser(any(UserDto.class)))
+        when(backendServiceClient.registerUser(any(UserRequestDto.class)))
                 .thenThrow(feignClientException);
-        assertThrows(ConflictException.class, () -> registrationService.registerUser(new UserDto()));
-        verify(backendServiceClient, times(1)).registerUser(any(UserDto.class));
+        assertThrows(ConflictException.class, () -> registrationService.registerUser(new UserRequestDto()));
+        verify(backendServiceClient, times(1)).registerUser(any(UserRequestDto.class));
     }
 
 
     @Test
     void test_registerUser_whenServerIsDown() {
-        UserDto userRequestDto = new UserDto();
-        when(backendServiceClient.registerUser(any(UserDto.class))).thenThrow(RetryableException.class);
+        UserRequestDto userRequestDto = new UserRequestDto();
+        when(backendServiceClient.registerUser(any(UserRequestDto.class))).thenThrow(RetryableException.class);
 
         assertThrows(RetryableException.class, () -> registrationService.registerUser(userRequestDto));
 
-        verify(backendServiceClient, times(1)).registerUser(any(UserDto.class));
+        verify(backendServiceClient, times(1)).registerUser(any(UserRequestDto.class));
+    }
+
+    @Test
+    void test_getUsernameById() {
+        when(backendServiceClient.getUsernameById(1L)).thenReturn(ResponseEntity.ok(new UsernameResponseDto("user1")));
+        UsernameResponseDto usernameResponseDto = registrationService.getUsernameById(1L);
+
+        assertEquals(usernameResponseDto.getUserName(), "user1");
+
+        verify(backendServiceClient, times(1)).getUsernameById(1L);
+    }
+
+    @Test
+    void test_getUsernameById_whenNotFound() {
+        NotFoundException feignClientException = new NotFoundException("");
+        when(backendServiceClient.getUsernameById(1L)).thenThrow(feignClientException);
+
+        assertThrows(NotFoundException.class, () -> registrationService.getUsernameById(1L));
     }
 }

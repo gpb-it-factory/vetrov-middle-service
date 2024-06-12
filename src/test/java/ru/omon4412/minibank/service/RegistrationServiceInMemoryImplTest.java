@@ -1,7 +1,7 @@
 package ru.omon4412.minibank.service;
 
 import org.junit.jupiter.api.Test;
-import ru.omon4412.minibank.dto.UserDto;
+import ru.omon4412.minibank.dto.UserRequestDto;
 import ru.omon4412.minibank.exception.ConflictException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,16 +12,16 @@ class RegistrationServiceInMemoryImplTest {
 
     @Test
     void test_registerUser_success() {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(101010L);
-        registrationService.registerUser(userDto);
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(101010L);
+        registrationService.registerUser(userRequestDto);
     }
 
     @Test
     void test_registerUser_whenUserAlreadyRegistered() {
-        UserDto userDto = new UserDto();
-        userDto.setUserId(101010L);
-        registrationService.registerUser(userDto);
-        assertThrows(ConflictException.class, () -> registrationService.registerUser(userDto));
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(101010L);
+        registrationService.registerUser(userRequestDto);
+        assertThrows(ConflictException.class, () -> registrationService.registerUser(userRequestDto));
     }
 }

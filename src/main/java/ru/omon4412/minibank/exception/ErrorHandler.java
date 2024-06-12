@@ -71,6 +71,13 @@ public class ErrorHandler {
         return ApiError.from(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, path);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return ApiError.from(e.getMessage(), HttpStatus.NOT_FOUND, path);
+    }
+
     @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleThrowable(Throwable e, HttpServletRequest request) {
