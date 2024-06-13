@@ -16,7 +16,7 @@ public class RegistrationServiceInMemoryImpl implements RegistrationService {
     @Override
     public void registerUser(UserDto userDto) {
         if (users.contains(userDto)) {
-            throw new ConflictException("Пользователь уже существует");
+            throw new ConflictException("Пользователь уже зарегистрирован");
         }
         users.add(userDto);
     }

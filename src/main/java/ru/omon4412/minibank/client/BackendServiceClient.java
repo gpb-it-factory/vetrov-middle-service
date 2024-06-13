@@ -8,6 +8,6 @@ import ru.omon4412.minibank.dto.UserDto;
 @FeignClient(name = "backendService", url = "${application.backendService.url}")
 public interface BackendServiceClient {
 
-    @PostMapping("/users")
+    @PostMapping("/v2/users")
     ResponseEntity<Void> registerUser(UserDto userRequestDto);
 }

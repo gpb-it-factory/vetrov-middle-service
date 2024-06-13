@@ -36,6 +36,7 @@ class RegistrationControllerTest {
     void test_registerUser_success() throws Exception {
         UserDto userDto = new UserDto();
         userDto.setUserId(10101L);
+        userDto.setUserName("TestUser");
 
         doNothing().when(registrationService).registerUser(any(UserDto.class));
 

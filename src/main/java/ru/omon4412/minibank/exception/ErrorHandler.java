@@ -25,6 +25,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         String path = request.getRequestURI();
         Map<String, Object> errors = new HashMap<>();
@@ -33,7 +34,7 @@ public class ErrorHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return ApiError.from(errors.toString(), HttpStatus.CONFLICT, path);
+        return ApiError.from(errors.toString(), HttpStatus.BAD_REQUEST, path);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
