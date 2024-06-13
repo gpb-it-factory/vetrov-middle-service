@@ -1,6 +1,6 @@
 package ru.omon4412.minibank.service;
 
-import lombok.Data;
+import lombok.Setter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import ru.omon4412.minibank.dto.NewAccountDto;
@@ -37,12 +37,12 @@ public class AccountServiceInMemoryImpl implements AccountService {
         account.setAmount(5000L);
         accounts.put(userId, account);
     }
-}
 
-@Data
-class Account {
-    private String accountId;
-    private String accountName;
-    private long amount;
-    private Long ownerId;
+    @Setter
+    static class Account {
+        private String accountId;
+        private String accountName;
+        private long amount;
+        private Long ownerId;
+    }
 }

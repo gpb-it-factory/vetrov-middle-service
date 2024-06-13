@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.omon4412.minibank.exception.*;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class CustomErrorDecoder implements ErrorDecoder {
@@ -22,7 +23,7 @@ public class CustomErrorDecoder implements ErrorDecoder {
         String errorMessage = "";
         try {
             if (response.body() != null) {
-                String responseBody = Util.toString(response.body().asReader());
+                String responseBody = Util.toString(response.body().asReader(StandardCharsets.UTF_8));
                 ApiError apiError = objectMapper.readValue(responseBody, ApiError.class);
                 errorMessage = apiError.getError();
             }

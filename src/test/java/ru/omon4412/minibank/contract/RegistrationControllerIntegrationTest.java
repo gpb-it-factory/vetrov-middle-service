@@ -1,0 +1,35 @@
+package ru.omon4412.minibank.contract;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import ru.omon4412.minibank.BaseContextTest;
+import ru.omon4412.minibank.dto.UserRequestDto;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@AutoConfigureMockMvc
+public class RegistrationControllerIntegrationTest extends BaseContextTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    public void registerUser_shouldReturnNoContent() throws Exception {
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(99999L);
+        userRequestDto.setUserName("TestUser2");
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequestDto)))
+                .andExpect(status().isNoContent());
+    }
+}
