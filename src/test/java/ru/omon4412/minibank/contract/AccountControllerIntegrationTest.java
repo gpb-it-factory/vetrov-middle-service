@@ -17,13 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AccountControllerIntegrationTest extends BaseContextTest {
 
+    private static Long userId = 1L;
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
-    private static Long userId = 1L;
 
     @BeforeEach
     public void registerUser() throws Exception {
@@ -38,7 +36,7 @@ public class AccountControllerIntegrationTest extends BaseContextTest {
     }
 
     @Test
-    public void createAccount_shouldReturnNoContent() throws Exception {
+    public void createAccount_withAccountName_shouldReturnNoContent() throws Exception {
         NewAccountDto newAccountDto = new NewAccountDto();
         newAccountDto.setAccountName("Test Account");
 
@@ -49,13 +47,13 @@ public class AccountControllerIntegrationTest extends BaseContextTest {
     }
 
     @Test
-    public void createAccount_shouldReturnBadRequest() throws Exception {
+    public void createAccount_withoutAccountName_shouldReturnNoContent() throws Exception {
         NewAccountDto newAccountDto = new NewAccountDto();
         newAccountDto.setAccountName(null);
 
         mockMvc.perform(post("/users/{id}/accounts", userId++)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newAccountDto)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNoContent());
     }
 }

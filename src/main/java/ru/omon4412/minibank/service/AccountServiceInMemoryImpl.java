@@ -33,7 +33,7 @@ public class AccountServiceInMemoryImpl implements AccountService {
         Account account = new Account();
         account.setAccountId(uuid);
         account.setOwnerId(userId);
-        account.setAccountName(newAccountDto.getAccountName());
+        account.setAccountName(newAccountDto.getAccountName() == null ? "Акционный" : newAccountDto.getAccountName());
         account.setAmount(5000L);
         accounts.put(userId, account);
     }

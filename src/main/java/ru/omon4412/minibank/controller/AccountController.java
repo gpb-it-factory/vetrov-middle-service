@@ -15,7 +15,8 @@ public class AccountController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createAccount(@PathVariable("id") Long userId, @Valid @RequestBody NewAccountDto newAccountDto) {
+    public void createAccount(@PathVariable("id") Long userId,
+                              @Valid @RequestBody NewAccountDto newAccountDto) {
         accountService.createAccount(userId, newAccountDto);
     }
 }

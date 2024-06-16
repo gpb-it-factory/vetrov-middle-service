@@ -59,6 +59,6 @@ class AccountControllerTest {
         newAccountDto.setAccountName(null);
         mockMvc.perform(post("/users/1/accounts").content(new ObjectMapper().writeValueAsString(newAccountDto))
                         .contentType("application/json"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNoContent());
     }
 }
