@@ -9,8 +9,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import ru.omon4412.minibank.client.BackendServiceClient;
 import ru.omon4412.minibank.dto.NewAccountDto;
+import ru.omon4412.minibank.dto.ResponseAccountDto;
 import ru.omon4412.minibank.exception.ConflictException;
+import ru.omon4412.minibank.exception.NotFoundException;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -45,5 +52,69 @@ class AccountServiceImplTest {
         newAccountDto.setAccountName("test");
         when(backendServiceClient.createAccount(newAccountDto, 1L)).thenThrow(RetryableException.class);
         assertThrows(RetryableException.class, () -> accountService.createAccount(1L, newAccountDto));
+    }
+
+    @Test
+    void test_getOneUsersAccount() {
+        Collection<ResponseAccountDto> responseAccountDtos = new ArrayList<>();
+        ResponseAccountDto responseAccountDto1 = ResponseAccountDto.builder()
+                .accountName("TestName1")
+                .amount(5000L)
+                .accountId("TestId1")
+                .build();
+        responseAccountDtos.add(responseAccountDto1);
+        when(backendServiceClient.getUsersAccounts(1L)).thenReturn(ResponseEntity.ok(responseAccountDtos));
+
+        Collection<ResponseAccountDto> userAccounts = accountService.getUserAccounts(1L);
+
+        assertEquals(responseAccountDtos.size(), userAccounts.size());
+        assertEquals(responseAccountDtos, userAccounts);
+    }
+
+    @Test
+    void test_getTwoUsersAccount() {
+        Collection<ResponseAccountDto> responseAccountDtos = new ArrayList<>();
+        ResponseAccountDto responseAccountDto1 = ResponseAccountDto.builder()
+                .accountName("TestName1")
+                .amount(5000L)
+                .accountId("TestId1")
+                .build();
+        responseAccountDtos.add(responseAccountDto1);
+        ResponseAccountDto responseAccountDto2 = ResponseAccountDto.builder()
+                .accountName("TestName2")
+                .amount(7000L)
+                .accountId("TestId2")
+                .build();
+        responseAccountDtos.add(responseAccountDto2);
+        when(backendServiceClient.getUsersAccounts(1L)).thenReturn(ResponseEntity.ok(responseAccountDtos));
+
+        Collection<ResponseAccountDto> userAccounts = accountService.getUserAccounts(1L);
+
+        assertEquals(responseAccountDtos.size(), userAccounts.size());
+        assertEquals(responseAccountDtos, userAccounts);
+    }
+
+    @Test
+    void test_getZeroUsersAccount() {
+        when(backendServiceClient.getUsersAccounts(1L)).thenReturn(ResponseEntity.ok(Collections.emptyList()));
+
+        Collection<ResponseAccountDto> userAccounts = accountService.getUserAccounts(1L);
+
+        assertEquals(0, userAccounts.size());
+    }
+
+    @Test
+    void test_getUsersAccounts_whenServerIsDown() {
+        when(backendServiceClient.getUsersAccounts(1L)).thenThrow(RetryableException.class);
+
+        assertThrows(RetryableException.class, () -> accountService.getUserAccounts(1L));
+    }
+
+    @Test
+    void test_getUsersAccounts_whenUserNotFound() {
+        NotFoundException feignClientException = new NotFoundException("");
+        when(backendServiceClient.getUsersAccounts(1L)).thenThrow(feignClientException);
+
+        assertThrows(NotFoundException.class, () -> accountService.getUserAccounts(1L));
     }
 }
