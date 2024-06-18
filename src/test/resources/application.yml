@@ -1,7 +1,7 @@
 spring:
-  application:
-    name: MiddleService
-
+  config:
+    activate:
+      on-profile: test
 application:
   registrationService:
     type: inMemory

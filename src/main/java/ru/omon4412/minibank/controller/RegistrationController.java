@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.omon4412.minibank.dto.UserDto;
+import ru.omon4412.minibank.dto.UserRequestDto;
 import ru.omon4412.minibank.service.RegistrationService;
 
 @RestController
@@ -15,7 +15,7 @@ public class RegistrationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void registerUser(@Valid @RequestBody UserDto userDto) {
-        registrationService.registerUser(userDto);
+    public void registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
+        registrationService.registerUser(userRequestDto);
     }
 }

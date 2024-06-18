@@ -53,12 +53,14 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleHttpMessageNotReadableException(HttpMessageNotReadableException e, HttpServletRequest request) {
         String path = request.getRequestURI();
         return ApiError.from(e.getMessage(), HttpStatus.BAD_REQUEST, path);
     }
 
     @ExceptionHandler(ServerNotAvailableException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ApiError handleServerNotAvailableException(ServerNotAvailableException e, HttpServletRequest request) {
         String path = request.getRequestURI();
         return ApiError.from(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE, path);
@@ -69,6 +71,13 @@ public class ErrorHandler {
     public ApiError handleInternalServerErrorException(InternalServerErrorException e, HttpServletRequest request) {
         String path = request.getRequestURI();
         return ApiError.from(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, path);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNotFoundException(NotFoundException e, HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return ApiError.from(e.getMessage(), HttpStatus.NOT_FOUND, path);
     }
 
     @ExceptionHandler(Throwable.class)

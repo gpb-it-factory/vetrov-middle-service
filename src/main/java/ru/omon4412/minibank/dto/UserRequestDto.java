@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class UserRequestDto {
     @NotNull
     private Long userId;
     @NotNull
