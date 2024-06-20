@@ -4,11 +4,11 @@ import lombok.Setter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import ru.omon4412.minibank.dto.NewAccountDto;
+import ru.omon4412.minibank.dto.ResponseAccountDto;
 import ru.omon4412.minibank.exception.ConflictException;
 import ru.omon4412.minibank.exception.NotFoundException;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -38,11 +38,32 @@ public class AccountServiceInMemoryImpl implements AccountService {
         accounts.put(userId, account);
     }
 
+    @Override
+    public Collection<ResponseAccountDto> getUserAccounts(Long userId) {
+        if (registrationService.getUsernameById(userId) == null) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+        Collection<ResponseAccountDto> accountDtos = new ArrayList<>();
+        if (!accounts.containsKey(userId)) {
+            return Collections.emptyList();
+        }
+        accountDtos.add(Account.toResponseAccountDto(accounts.get(userId)));
+        return accountDtos;
+    }
+
     @Setter
     static class Account {
         private String accountId;
         private String accountName;
         private long amount;
         private Long ownerId;
+
+        public static ResponseAccountDto toResponseAccountDto(Account account) {
+            return ResponseAccountDto.builder()
+                    .accountId(account.accountId)
+                    .accountName(account.accountName)
+                    .amount(account.amount)
+                    .build();
+        }
     }
 }

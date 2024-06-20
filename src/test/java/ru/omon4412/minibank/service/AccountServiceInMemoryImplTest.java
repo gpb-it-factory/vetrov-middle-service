@@ -2,10 +2,14 @@ package ru.omon4412.minibank.service;
 
 import org.junit.jupiter.api.Test;
 import ru.omon4412.minibank.dto.NewAccountDto;
+import ru.omon4412.minibank.dto.ResponseAccountDto;
 import ru.omon4412.minibank.dto.UserRequestDto;
 import ru.omon4412.minibank.exception.ConflictException;
 import ru.omon4412.minibank.exception.NotFoundException;
 
+import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AccountServiceInMemoryImplTest {
@@ -44,5 +48,33 @@ class AccountServiceInMemoryImplTest {
         accountServiceInMemory.createAccount(1L, newAccountDto1);
 
         assertThrows(ConflictException.class, () -> accountServiceInMemory.createAccount(1L, newAccountDto2));
+    }
+
+    @Test
+    void test_getOneUsersAccount() {
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(1L);
+        userRequestDto.setUserName("user1");
+        NewAccountDto newAccountDto1 = new NewAccountDto();
+        newAccountDto1.setAccountName("account1");
+
+        registrationServiceInMemory.registerUser(userRequestDto);
+        accountServiceInMemory.createAccount(1L, newAccountDto1);
+        Collection<ResponseAccountDto> userAccounts = accountServiceInMemory.getUserAccounts(1L);
+
+        assertEquals(1, userAccounts.size());
+    }
+
+    @Test
+    void test_getZeroUsersAccount() {
+        UserRequestDto userRequestDto = new UserRequestDto();
+        userRequestDto.setUserId(1L);
+        userRequestDto.setUserName("user1");
+
+        registrationServiceInMemory.registerUser(userRequestDto);
+
+        Collection<ResponseAccountDto> userAccounts = accountServiceInMemory.getUserAccounts(1L);
+
+        assertEquals(0, userAccounts.size());
     }
 }

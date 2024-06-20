@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.omon4412.minibank.dto.NewAccountDto;
+import ru.omon4412.minibank.dto.ResponseAccountDto;
 import ru.omon4412.minibank.dto.UserRequestDto;
 import ru.omon4412.minibank.dto.UsernameResponseDto;
+
+import java.util.Collection;
 
 @FeignClient(name = "backendService", url = "${application.backendService.url}")
 public interface BackendServiceClient {
@@ -17,6 +20,9 @@ public interface BackendServiceClient {
 
     @PostMapping("/v2/users/{id}/accounts")
     ResponseEntity<Void> createAccount(NewAccountDto newAccountDto, @PathVariable("id") Long userId);
+
+    @GetMapping("/v2/users/{id}/accounts")
+    ResponseEntity<Collection<ResponseAccountDto>> getUsersAccounts(@PathVariable("id") Long userId);
 
     @GetMapping("/v2/users/{id}/username")
     ResponseEntity<UsernameResponseDto> getUsernameById(@PathVariable("id") Long userId);

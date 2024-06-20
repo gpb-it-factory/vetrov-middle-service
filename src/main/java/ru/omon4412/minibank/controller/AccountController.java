@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.omon4412.minibank.dto.NewAccountDto;
+import ru.omon4412.minibank.dto.ResponseAccountDto;
 import ru.omon4412.minibank.service.AccountService;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/users/{id}/accounts")
@@ -18,5 +21,10 @@ public class AccountController {
     public void createAccount(@PathVariable("id") Long userId,
                               @Valid @RequestBody NewAccountDto newAccountDto) {
         accountService.createAccount(userId, newAccountDto);
+    }
+
+    @GetMapping
+    public Collection<ResponseAccountDto> getUserAccounts(@PathVariable("id") Long userId) {
+        return accountService.getUserAccounts(userId);
     }
 }
