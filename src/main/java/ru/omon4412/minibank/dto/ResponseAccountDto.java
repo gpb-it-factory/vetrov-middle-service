@@ -10,5 +10,5 @@ import lombok.Getter;
 public class ResponseAccountDto {
     private String accountId;
     private String accountName;
-    private long amount;
+    private double amount;
 }

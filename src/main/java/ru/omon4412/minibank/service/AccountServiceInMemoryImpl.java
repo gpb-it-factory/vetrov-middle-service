@@ -34,7 +34,7 @@ public class AccountServiceInMemoryImpl implements AccountService {
         account.setAccountId(uuid);
         account.setOwnerId(userId);
         account.setAccountName(newAccountDto.getAccountName() == null ? "Акционный" : newAccountDto.getAccountName());
-        account.setAmount(5000L);
+        account.setAmount(5000.00);
         accounts.put(userId, account);
     }
 
@@ -55,7 +55,7 @@ public class AccountServiceInMemoryImpl implements AccountService {
     static class Account {
         private String accountId;
         private String accountName;
-        private long amount;
+        private double amount;
         private Long ownerId;
 
         public static ResponseAccountDto toResponseAccountDto(Account account) {
