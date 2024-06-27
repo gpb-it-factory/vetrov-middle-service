@@ -12,8 +12,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@ConditionalOnProperty(value = "application.accountService.type", havingValue = "inMemory")
-public class AccountServiceInMemoryImpl implements AccountService {
+@ConditionalOnProperty(value = "application.services.type", havingValue = "inMemory")
+public class AccountServiceInMemoryImpl implements AccountServiceBalanceUpdate {
     private final Map<Long, Account> accounts = new ConcurrentHashMap<>();
     private final RegistrationService registrationService;
 
@@ -49,6 +49,18 @@ public class AccountServiceInMemoryImpl implements AccountService {
         }
         accountDtos.add(Account.toResponseAccountDto(accounts.get(userId)));
         return accountDtos;
+    }
+
+    @Override
+    public void updateAccount(ResponseAccountDto updatedAccountDto) {
+        Account account = accounts.values().stream()
+                .filter(acc -> acc.accountId.equals(updatedAccountDto.getAccountId()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Аккаунт не найден"));
+
+        account.setAccountName(updatedAccountDto.getAccountName());
+        account.setAmount(updatedAccountDto.getAmount());
+        accounts.put(account.ownerId, account);
     }
 
     @Setter

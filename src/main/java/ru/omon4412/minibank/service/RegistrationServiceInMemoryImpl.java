@@ -2,15 +2,17 @@ package ru.omon4412.minibank.service;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+import ru.omon4412.minibank.dto.UserIdResponseDto;
 import ru.omon4412.minibank.dto.UserRequestDto;
 import ru.omon4412.minibank.dto.UsernameResponseDto;
 import ru.omon4412.minibank.exception.ConflictException;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@ConditionalOnProperty(value = "application.registrationService.type", havingValue = "inMemory")
+@ConditionalOnProperty(value = "application.services.type", havingValue = "inMemory")
 public class RegistrationServiceInMemoryImpl implements RegistrationService {
     private final Map<Long, UserRequestDto> users = new ConcurrentHashMap<>();
 
@@ -29,5 +31,14 @@ public class RegistrationServiceInMemoryImpl implements RegistrationService {
             return null;
         }
         return new UsernameResponseDto(userRequestDto.getUserName());
+    }
+
+    @Override
+    public UserIdResponseDto getUserIdByUsername(String username) {
+        Optional<UserRequestDto> userRequestDto = users.values().stream()
+                .filter(u -> u.getUserName()
+                        .equals(username))
+                .findFirst();
+        return userRequestDto.map(requestDto -> new UserIdResponseDto(requestDto.getUserId())).orElse(null);
     }
 }

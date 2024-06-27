@@ -26,7 +26,6 @@ class RegistrationServiceImplTest {
     @InjectMocks
     private RegistrationServiceImpl registrationService;
 
-
     @Test
     void test_registerUser_success() {
         UserRequestDto userRequestDto = new UserRequestDto();
@@ -59,7 +58,7 @@ class RegistrationServiceImplTest {
     }
 
     @Test
-    void test_getUsernameById() {
+    void test_getUsernameById_success() {
         when(backendServiceClient.getUsernameById(1L)).thenReturn(ResponseEntity.ok(new UsernameResponseDto("user1")));
         UsernameResponseDto usernameResponseDto = registrationService.getUsernameById(1L);
 
