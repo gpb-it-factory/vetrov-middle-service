@@ -59,7 +59,7 @@ class AccountServiceImplTest {
         Collection<ResponseAccountDto> responseAccountDtos = new ArrayList<>();
         ResponseAccountDto responseAccountDto1 = ResponseAccountDto.builder()
                 .accountName("TestName1")
-                .amount(5000L)
+                .amount(5000.00)
                 .accountId("TestId1")
                 .build();
         responseAccountDtos.add(responseAccountDto1);
@@ -76,13 +76,13 @@ class AccountServiceImplTest {
         Collection<ResponseAccountDto> responseAccountDtos = new ArrayList<>();
         ResponseAccountDto responseAccountDto1 = ResponseAccountDto.builder()
                 .accountName("TestName1")
-                .amount(5000L)
+                .amount(5000.00)
                 .accountId("TestId1")
                 .build();
         responseAccountDtos.add(responseAccountDto1);
         ResponseAccountDto responseAccountDto2 = ResponseAccountDto.builder()
                 .accountName("TestName2")
-                .amount(7000L)
+                .amount(5000.00)
                 .accountId("TestId2")
                 .build();
         responseAccountDtos.add(responseAccountDto2);

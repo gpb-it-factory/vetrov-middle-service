@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AccountControllerIntegrationTest extends BaseContextTest {
 
-    private static Long userId = 1L;
+    private static Long userId = 99L;
     @Autowired
     private MockMvc mockMvc;
     @Autowired

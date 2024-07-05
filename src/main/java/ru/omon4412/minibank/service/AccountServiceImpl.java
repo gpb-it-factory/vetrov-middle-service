@@ -10,7 +10,7 @@ import ru.omon4412.minibank.dto.ResponseAccountDto;
 import java.util.Collection;
 
 @Service
-@ConditionalOnProperty(value = "application.accountService.type", havingValue = "backend")
+@ConditionalOnProperty(value = "application.services.type", havingValue = "backend")
 @AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final BackendServiceClient backendServiceClient;

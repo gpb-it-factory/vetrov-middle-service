@@ -12,8 +12,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-@ConditionalOnProperty(value = "application.accountService.type", havingValue = "inMemory")
-public class AccountServiceInMemoryImpl implements AccountService {
+@ConditionalOnProperty(value = "application.services.type", havingValue = "inMemory")
+public class AccountServiceInMemoryImpl implements AccountServiceBalanceUpdate {
     private final Map<Long, Account> accounts = new ConcurrentHashMap<>();
     private final RegistrationService registrationService;
 
@@ -34,7 +34,7 @@ public class AccountServiceInMemoryImpl implements AccountService {
         account.setAccountId(uuid);
         account.setOwnerId(userId);
         account.setAccountName(newAccountDto.getAccountName() == null ? "Акционный" : newAccountDto.getAccountName());
-        account.setAmount(5000L);
+        account.setAmount(5000.00);
         accounts.put(userId, account);
     }
 
@@ -51,11 +51,23 @@ public class AccountServiceInMemoryImpl implements AccountService {
         return accountDtos;
     }
 
+    @Override
+    public void updateAccount(ResponseAccountDto updatedAccountDto) {
+        Account account = accounts.values().stream()
+                .filter(acc -> acc.accountId.equals(updatedAccountDto.getAccountId()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Аккаунт не найден"));
+
+        account.setAccountName(updatedAccountDto.getAccountName());
+        account.setAmount(updatedAccountDto.getAmount());
+        accounts.put(account.ownerId, account);
+    }
+
     @Setter
     static class Account {
         private String accountId;
         private String accountName;
-        private long amount;
+        private double amount;
         private Long ownerId;
 
         public static ResponseAccountDto toResponseAccountDto(Account account) {

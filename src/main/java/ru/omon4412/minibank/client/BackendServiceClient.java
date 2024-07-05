@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.omon4412.minibank.dto.NewAccountDto;
-import ru.omon4412.minibank.dto.ResponseAccountDto;
-import ru.omon4412.minibank.dto.UserRequestDto;
-import ru.omon4412.minibank.dto.UsernameResponseDto;
+import ru.omon4412.minibank.dto.*;
 
 import java.util.Collection;
 
@@ -24,6 +21,12 @@ public interface BackendServiceClient {
     @GetMapping("/v2/users/{id}/accounts")
     ResponseEntity<Collection<ResponseAccountDto>> getUsersAccounts(@PathVariable("id") Long userId);
 
-    @GetMapping("/v2/users/{id}/username")
+    @GetMapping("v2/users/{id:\\d+}")
     ResponseEntity<UsernameResponseDto> getUsernameById(@PathVariable("id") Long userId);
+
+    @GetMapping("/v2/users/{username:[a-zA-Z]+}")
+    ResponseEntity<UserIdResponseDto> getUserIdByUserName(@PathVariable("username") String username);
+
+    @PostMapping("/v2/transfers")
+    ResponseEntity<TransferResponseDto> transferMoney(CreateTransferRequestDto createTransferRequestDto);
 }
